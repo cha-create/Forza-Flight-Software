@@ -30,7 +30,10 @@ void FirePyro2()
     {
         digitalWrite(31, HIGH);
     }
-    digitalWrite(31, LOW);
+    if (pyroDelay.getTimerValue() == 0)
+    {
+        digitalWrite(31, LOW);
+    }
 }
 
 void fireBothPyros()
@@ -43,7 +46,7 @@ void fireBothPyros()
 }
 void detectChutes()
 {
-    if (systemState == 2 && BMPAltitudeUpdateAGL() <= 15 && hitApogee && timeSinceLiftoff >= 3500)
+    if (systemState == 2 && BMPAltitudeUpdateAGL() <= 10 && hitApogee && timeSinceLiftoff >= 3500)
     {
         FirePyro1();
         systemState++;
