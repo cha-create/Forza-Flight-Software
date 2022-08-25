@@ -29,7 +29,7 @@ void loop()
     dataLog();
     TVCCenter();
     Serial.println(BMPAltitudeUpdateAGL()); // debugging
-    if (systemState == 0)                 // Ground idle
+    if (systemState == 0)                   // Ground idle
     {
         allPyrosLow();
         detectLiftoff();

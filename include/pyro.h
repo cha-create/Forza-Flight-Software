@@ -2,6 +2,7 @@
 #include <UniversalTimer.h>
 extern float altitudeAGL;
 extern int timeSinceLiftoff;
+bool pyro1Fired = false;
 // extern int SITLAltitudeAGL;
 UniversalTimer pyroDelay(1000, false);
 
@@ -20,6 +21,7 @@ void FirePyro1()
         digitalWrite(30, HIGH);
     }
     digitalWrite(30, LOW);
+    pyro1Fired = true;
 }
 
 void FirePyro2()
