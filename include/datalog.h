@@ -14,7 +14,8 @@ void SDInit()
     SD.begin(BUILTIN_SDCARD);
     if (!SD.begin(BUILTIN_SDCARD))
     {
-        Serial.print("The SD card failed to initalize");
+        Serial.print("The SD card failed to initialize");
+        failureBeeps();
         while (1)
             ;
     }

@@ -52,3 +52,39 @@ void State_Indication()
         lightDelay1.stop();
     }
 }
+
+void startupBeeps()
+{
+    tone(2, 1262);
+    delay(250);
+    tone(2, 1523);
+    delay(250);
+    tone(2, 2047);
+    delay(250);
+    noTone(2);
+}
+
+void failureBeeps()
+{
+    tone(2, 2047);
+    delay(150);
+    tone(2, 1523);
+    delay(150);
+    tone(2, 1262);
+    delay(150);
+    noTone(2);
+    tone(2, 2047);
+    delay(150);
+    tone(2, 1523);
+    delay(150);
+    tone(2, 1262);
+    delay(150);
+    noTone(2);
+    tone(2, 2047);
+    delay(150);
+    tone(2, 1523);
+    delay(150);
+    tone(2, 1262);
+    delay(150);
+    noTone(2);
+}

@@ -19,6 +19,10 @@ void setup()
     BMPInit();
     SDInit();
     TVCInitalize();
+    delay(500);
+    startupBeeps();
+    Serial.println("startup complete...");
+    delay(250);
 }
 
 void loop()

@@ -10,6 +10,7 @@
 Adafruit_BMP280 bmp(BMP_CS);
 UniversalTimer deviationDelay(5000, false);
 extern int systemState;
+extern void failureBeeps();
 bool hitApogee;
 bool hasDeviation;
 extern int timeSinceLiftoff;
@@ -21,8 +22,11 @@ void BMPInit()
     if (!bmp.begin())
     {
         Serial.print("Connection To Barometer Failed...");
+        failureBeeps();
+        while (1)
+            ;
     }
-    Serial.println("Succesfully connected to BMP280...");
+    Serial.println("Succesfully connected to BMP280.");
     bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,  /* Operating Mode. */
                     Adafruit_BMP280::SAMPLING_X2,  /* Temp. oversampling */
                     Adafruit_BMP280::SAMPLING_X16, /* Pressure oversampling */

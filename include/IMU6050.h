@@ -3,17 +3,26 @@
 #include <I2Cdev.h>
 #include <Wire.h>
 MPU6050 mpu;
-
+extern void failureBeeps();
 int16_t ax, ay, az;
 int16_t gx, gy, gz;
 bool hasLiftoff;
 extern int systemState;
 void mpuInit()
 {
-    Serial.print("Connecting to MPU6050 IMU");
+    Serial.println("");
+    Serial.println("Connecting to MPU6050 IMU...");
     Wire.begin();
     mpu.initialize();
-    Serial.println(mpu.testConnection() ? "\nIMU Ready..." : "\nIMU connection failed...");
+    if (!mpu.testConnection())
+    {
+        Serial.println("IMU connection failed...");
+        failureBeeps();
+        while (1)
+            ;
+    }
+    Serial.println("");
+    Serial.println("IMU ready.");
 }
 
 void printVals_IMU_x10()
