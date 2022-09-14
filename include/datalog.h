@@ -45,7 +45,7 @@ void dataLog()
         sprintf(buffer, "%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f,%f,%d, %d", millis(), ax, ay, az, gx, gy, gz, systemState, BMPAltitudeUpdate(), BMPAltitudeUpdateAGL(), BMPPressureUpdate(), BMPTempUpdate(), pyro1Fired, timeSinceLiftoff);
         forzaFlightData.println(buffer);
         // Serial.println(millis()); // just a lil debugging :)
-        delay(100);
+        delay(10);
     }
     forzaFlightData.close();
 }
