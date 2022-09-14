@@ -30,7 +30,7 @@ void SDInit()
         if (forzaFlightData)
         {
 
-            forzaFlightData.println("Time, X_ACC, Y_ACC, Z_ACC, X_GYRO, Y_GYRO, Z_GYRO, System_State, altitude, altitudeAGL, Pressure, Temp, pyro1Fired");
+            forzaFlightData.println("Time, X_ACC, Y_ACC, Z_ACC, X_GYRO, Y_GYRO, Z_GYRO, System_State, altitude, altitudeAGL, Pressure, Temp, pyro1Fired, timeSinceLiftoff");
         }
         hasRun = true;
     }
@@ -42,7 +42,7 @@ void dataLog()
     forzaFlightData = SD.open(filename, FILE_WRITE);
     if (forzaFlightData)
     {
-        sprintf(buffer, "%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f,%f,%d", millis(), ax, ay, az, gx, gy, gz, systemState, BMPAltitudeUpdate(), BMPAltitudeUpdateAGL(), BMPPressureUpdate(), BMPTempUpdate(), pyro1Fired);
+        sprintf(buffer, "%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f,%f,%d, %d", millis(), ax, ay, az, gx, gy, gz, systemState, BMPAltitudeUpdate(), BMPAltitudeUpdateAGL(), BMPPressureUpdate(), BMPTempUpdate(), pyro1Fired, timeSinceLiftoff);
         forzaFlightData.println(buffer);
         // Serial.println(millis()); // just a lil debugging :)
         delay(100);
