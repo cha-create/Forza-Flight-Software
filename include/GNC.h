@@ -7,5 +7,5 @@ void navUpdate()
     int temp = BMPTempUpdate();
     int ax, ay, az = IMUAccelUpdate();
     int gx, gy, gz = IMUGyroUpdate();
-    int altitudeAGL = BMPAltitudeUpdate() - 280.416;
+    int altitudeAGL = BMPAltitudeUpdateAGL();
 }

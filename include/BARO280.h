@@ -95,7 +95,7 @@ bool detectApogee()
 }
 void detectLanding()
 {
-    if (systemState == 3 && hitApogee && BMPAltitudeUpdateAGL() < 5)
+    if (systemState == 2 && hitApogee && BMPAltitudeUpdateAGL() < 5)
     {
         systemState++;
     }

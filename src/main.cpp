@@ -32,27 +32,29 @@ void loop()
     navUpdate();
     dataLog();
     TVCCenter();
-    Serial.println(BMPAltitudeUpdateAGL()); // debugging
-    if (systemState == 0)                   // Ground idle
+    Serial.println(timeSinceLiftoff); // debugging
+    if (systemState == 0)             // Ground idle
     {
         allPyrosLow();
         detectLiftoff();
     }
     if (systemState == 1) // Ascent
     {
-        detectApogee();
+        if (timeSinceLiftoff >= 4500)
+        {
+            FirePyro1();
+            hitApogee = true;
+            systemState++;
+        }
     }
-    if (systemState == 2) // Ballistic descent
-    {
-        detectChutes();
-    }
-    if (systemState == 3) // Under chutes
+    if (systemState == 2) // under chutes
     {
         detectLanding();
     }
-    if (systemState == 4)
+    if (systemState == 3) // landed
     {
         stopDataLog();
     }
+
     delay(10);
 }

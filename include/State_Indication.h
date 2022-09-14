@@ -25,12 +25,12 @@ void State_Indication()
         digitalWrite(9, LOW);
         digitalWrite(6, HIGH);
     }
+    // if (systemState == 3)
+    // {
+    //     digitalWrite(9, HIGH);
+    //     digitalWrite(6, HIGH);
+    // }
     if (systemState == 3)
-    {
-        digitalWrite(9, HIGH);
-        digitalWrite(6, HIGH);
-    }
-    if (systemState == 4)
     {
         lightDelay.start();
         while (!lightDelay.check())
