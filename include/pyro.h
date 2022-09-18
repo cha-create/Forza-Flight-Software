@@ -4,7 +4,7 @@ extern float altitudeAGL;
 extern int timeSinceLiftoff;
 bool pyro1Fired = false;
 // extern int SITLAltitudeAGL;
-UniversalTimer pyroDelay(1000, false);
+UniversalTimer pyroDelay(2000, false);
 
 void allPyrosLow()
 {

@@ -48,7 +48,7 @@ int IMUGyroUpdate()
 }
 void detectLiftoff()
 {
-    if (systemState == 0 && ay >= 30000)
+    if (systemState == 0 && ay >= 25000)
     {
         systemState++;
         hasLiftoff = true;
