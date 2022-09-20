@@ -6,6 +6,7 @@ const char filename[] = "forzaDataLog.txt";
 extern int pressure;
 extern int temp;
 extern int altitude;
+extern float maxAltitude;
 extern bool pyro1Fired;
 char buffer[128];
 bool hasRun = false;
@@ -30,7 +31,7 @@ void SDInit()
         if (forzaFlightData)
         {
 
-            forzaFlightData.println("Time, X_ACC, Y_ACC, Z_ACC, X_GYRO, Y_GYRO, Z_GYRO, System_State, altitude, altitudeAGL, Pressure, Temp, pyro1Fired, timeSinceLiftoff");
+            forzaFlightData.println("Time, X_ACC, Y_ACC, Z_ACC, X_GYRO, Y_GYRO, Z_GYRO, System_State, altitude, altitudeAGL, Pressure, Temp, pyro1Fired, timeSinceLiftoff, maxAltitude");
         }
         hasRun = true;
     }
@@ -42,7 +43,7 @@ void dataLog()
     forzaFlightData = SD.open(filename, FILE_WRITE);
     if (forzaFlightData)
     {
-        sprintf(buffer, "%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f,%f,%d, %d", millis(), ax, ay, az, gx, gy, gz, systemState, BMPAltitudeUpdate(), BMPAltitudeUpdateAGL(), BMPPressureUpdate(), BMPTempUpdate(), pyro1Fired, timeSinceLiftoff);
+        sprintf(buffer, "%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f,%f,%d,%d,%f", millis(), ax, ay, az, gx, gy, gz, systemState, BMPAltitudeUpdate(), BMPAltitudeUpdateAGL(), BMPPressureUpdate(), BMPTempUpdate(), pyro1Fired, timeSinceLiftoff, maxAltitude);
         forzaFlightData.println(buffer);
         // Serial.println(millis()); // just a lil debugging :)
         delay(10);

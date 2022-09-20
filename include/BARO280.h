@@ -13,9 +13,11 @@ extern int systemState;
 extern void failureBeeps();
 bool hitApogee;
 bool hasDeviation;
+float lastAltitude;
 extern int timeSinceLiftoff;
 extern float altitudeAGL;
 int deviation;
+float maxAltitude;
 float currentAltitude = 0;
 void BMPInit()
 {
@@ -27,9 +29,11 @@ void BMPInit()
             ;
     }
     Serial.println("Succesfully connected to BMP280.");
-    bmp.STANDBY_MS_1;
-    bmp.FILTER_X16;
-    bmp.SAMPLING_NONE;
+    bmp.setSampling(Adafruit_BMP280::MODE_NORMAL, /* Operating Mode. */
+                    Adafruit_BMP280::SAMPLING_X1, /* Temp. oversampling */
+                    Adafruit_BMP280::SAMPLING_X8, /* Pressure oversampling */
+                    Adafruit_BMP280::FILTER_X16,  /* Filtering. */
+                    Adafruit_BMP280::STANDBY_MS_1);
 }
 
 void printVals_BARO_x10()
@@ -75,9 +79,14 @@ float BMPAltitudeUpdateAGL()
 }
 bool detectApogee()
 {
+    if (currentAltitude >= lastAltitude)
+    {
+        maxAltitude = currentAltitude;
+    }
+
     if (systemState == 1 && timeSinceLiftoff >= 2500)
     {
-        float lastAltitude = currentAltitude;
+        lastAltitude = currentAltitude;
         currentAltitude = BMPAltitudeUpdateAGL();
         if (currentAltitude > lastAltitude - 0.2)
         {

@@ -2,6 +2,7 @@
 #include <UniversalTimer.h>
 extern float altitudeAGL;
 extern int timeSinceLiftoff;
+extern float maxAltitude;
 bool pyro1Fired = false;
 // extern int SITLAltitudeAGL;
 UniversalTimer pyroDelay(2000, false);
@@ -48,7 +49,7 @@ void fireBothPyros()
 }
 void detectChutes()
 {
-    if (systemState == 2 && BMPAltitudeUpdateAGL() <= 10 && hitApogee && timeSinceLiftoff >= 3500)
+    if (systemState == 2 && BMPAltitudeUpdateAGL() <= (maxAltitude - 5.00) && hitApogee && timeSinceLiftoff >= 3500)
     {
         FirePyro1();
         systemState++;
