@@ -23,18 +23,13 @@ void BMPInit()
     {
         Serial.print("Connection To Barometer Failed...");
         failureBeeps();
-        while (1)
-            ;
     }
     Serial.println("Succesfully connected to BMP280.");
-    // bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,  /* Operating Mode. */
-    //                 Adafruit_BMP280::SAMPLING_X2,  /* Temp. oversampling */
-    //                 Adafruit_BMP280::SAMPLING_X16, /* Pressure oversampling */
-    //                 Adafruit_BMP280::FILTER_X16,   /* Filtering. */
-    //                 Adafruit_BMP280::STANDBY_MS_500);
-    bmp.FILTER_X16;
-    bmp.SAMPLING_NONE;
-    bmp.STANDBY_MS_1;
+    bmp.setSampling(Adafruit_BMP280::MODE_NORMAL, /* Operating Mode. */
+                    Adafruit_BMP280::SAMPLING_X1, /* Temp. oversampling */
+                    Adafruit_BMP280::SAMPLING_X8, /* Pressure oversampling */
+                    Adafruit_BMP280::FILTER_X16,  /* Filtering. */
+                    Adafruit_BMP280::STANDBY_MS_1);
 }
 
 void printVals_BARO_x10()

@@ -3,6 +3,7 @@
 UniversalTimer lightDelay(1000, true);
 UniversalTimer lightDelay1(1000, true);
 extern int systemState;
+extern bool errorboi;
 
 void State_Indication()
 {
@@ -64,6 +65,16 @@ void startupBeeps()
     noTone(2);
 }
 
+void failurelights()
+{
+    digitalWrite(6, HIGH);
+    digitalWrite(9, LOW);
+    delay(250);
+    digitalWrite(6, LOW);
+    digitalWrite(9, HIGH);
+    delay(250);
+}
+
 void failureBeeps()
 {
     tone(2, 2047);
@@ -87,4 +98,9 @@ void failureBeeps()
     tone(2, 1262);
     delay(150);
     noTone(2);
+    errorboi = true;
+    while (errorboi == true)
+    {
+        failurelights();
+    }
 }

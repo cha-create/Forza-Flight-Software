@@ -7,6 +7,7 @@
 #include <pyro.h>
 #include <datalog.h>
 #include <TVC.h>
+bool errorboi = false;
 int systemState = 0;
 extern float altitudeAGL = 0;
 extern int altitude = 0;
@@ -15,6 +16,8 @@ extern int pressure = 0;
 void setup()
 {
     Serial.begin(9600);
+    pinMode(6, OUTPUT);
+    pinMode(9, OUTPUT);
     mpuInit();
     BMPInit();
     SDInit();
@@ -32,8 +35,8 @@ void loop()
     navUpdate();
     dataLog();
     TVCCenter();
-    Serial.println(timeSinceLiftoff); // debugging
-    if (systemState == 0)             // Ground idle
+    Serial.println(timeSinceLiftoff);  // debugging
+    if (systemState == 0 && !errorboi) // Ground idle
     {
         allPyrosLow();
         detectLiftoff();

@@ -18,8 +18,6 @@ void mpuInit()
     {
         Serial.println("IMU connection failed...");
         failureBeeps();
-        while (1)
-            ;
     }
     Serial.println("");
     Serial.println("IMU ready.");
