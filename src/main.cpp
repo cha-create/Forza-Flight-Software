@@ -43,7 +43,7 @@ void loop()
     }
     if (systemState == 1) // Ascent
     {
-        if (timeSinceLiftoff >= 4500)
+        if (timeSinceLiftoff >= 5000)
         {
             FirePyro1();
             hitApogee = true;

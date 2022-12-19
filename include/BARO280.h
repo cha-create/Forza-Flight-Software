@@ -26,8 +26,8 @@ void BMPInit()
     }
     Serial.println("Succesfully connected to BMP280.");
     bmp.setSampling(Adafruit_BMP280::MODE_NORMAL, /* Operating Mode. */
-                    Adafruit_BMP280::SAMPLING_X1, /* Temp. oversampling */
-                    Adafruit_BMP280::SAMPLING_X8, /* Pressure oversampling */
+                    Adafruit_BMP280::SAMPLING_X2, /* Temp. oversampling */
+                    Adafruit_BMP280::SAMPLING_X16, /* Pressure oversampling */
                     Adafruit_BMP280::FILTER_X16,  /* Filtering. */
                     Adafruit_BMP280::STANDBY_MS_1);
 }
@@ -65,12 +65,12 @@ float BMPAltitudeUpdateAGL()
             hasDeviation = true;
         }
         altitudeAGL = deviation - deviation;
-        return altitudeAGL;
+        return altitudeAGL / 3.281;
     }
     if (systemState >= 1)
     {
         altitudeAGL = bmp.readAltitude(1013.55) - deviation;
-        return altitudeAGL;
+        return altitudeAGL / 3.281;
     }
 }
 bool detectApogee()
