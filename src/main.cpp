@@ -1,10 +1,10 @@
 #include <Arduino.h>
 #include <IMU6050.h>
 #include <BARO280.h>
-#include <GNC.h>
 #include <State_Indication.h>
 #include <System.h>
 #include <pyro.h>
+#include <GNC.h>
 #include <datalog.h>
 #include <TVC.h>
 bool errorboi = false;
@@ -32,10 +32,12 @@ void loop()
 {
     timeKeeper();
     State_Indication();
+    checkDataLog();
     navUpdate();
     dataLog();
     TVCCenter();
-    Serial.println(timeSinceLiftoff);  // debugging
+    Serial.print(String(timeSinceLiftoff) + ", ");
+    Serial.println(systemState);       // debugging
     if (systemState == 0 && !errorboi) // Ground idle
     {
         allPyrosLow();
@@ -56,7 +58,7 @@ void loop()
     }
     if (systemState == 3) // landed
     {
-        stopDataLog();
+        Serial.println("We've landed(?)");
     }
 
     delay(10);

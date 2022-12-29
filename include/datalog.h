@@ -9,6 +9,7 @@ extern int altitude;
 extern bool pyro1Fired;
 char buffer[128];
 bool hasRun = false;
+bool isDataLog = true;
 void SDInit()
 {
     SD.begin(BUILTIN_SDCARD);
@@ -37,17 +38,28 @@ void SDInit()
 
 void dataLog()
 {
-    forzaFlightData = SD.open(filename, FILE_WRITE);
-    if (forzaFlightData)
+    if (isDataLog)
     {
-        sprintf(buffer, "%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f,%f,%d, %d", millis(), ax, ay, az, gx, gy, gz, systemState, BMPAltitudeUpdate(), BMPAltitudeUpdateAGL(), BMPPressureUpdate(), BMPTempUpdate(), pyro1Fired, timeSinceLiftoff);
-        forzaFlightData.println(buffer);
-        // Serial.println(millis()); // just a lil debugging :)
-        delay(10);
+        forzaFlightData = SD.open(filename, FILE_WRITE);
+        if (forzaFlightData)
+        {
+            sprintf(buffer, "%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f,%f,%d, %d", millis(), ax, ay, az, gx, gy, gz, systemState, BMPAltitudeUpdate(), BMPAltitudeUpdateAGL(), BMPPressureUpdate(), BMPTempUpdate(), pyro1Fired, timeSinceLiftoff);
+            forzaFlightData.println(buffer);
+            // Serial.println(millis()); // just a lil debugging :)
+            delay(10);
+        }
+        forzaFlightData.close();
     }
-    forzaFlightData.close();
+    else
+    {
+        forzaFlightData.close();
+    }
 }
-void stopDataLog()
+
+void checkDataLog()
 {
-    forzaFlightData.close();
+    if (systemState == 3)
+    {
+        isDataLog = false;
+    }
 }

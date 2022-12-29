@@ -25,10 +25,10 @@ void BMPInit()
         failureBeeps();
     }
     Serial.println("Succesfully connected to BMP280.");
-    bmp.setSampling(Adafruit_BMP280::MODE_NORMAL, /* Operating Mode. */
-                    Adafruit_BMP280::SAMPLING_X2, /* Temp. oversampling */
+    bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,  /* Operating Mode. */
+                    Adafruit_BMP280::SAMPLING_X2,  /* Temp. oversampling */
                     Adafruit_BMP280::SAMPLING_X16, /* Pressure oversampling */
-                    Adafruit_BMP280::FILTER_X16,  /* Filtering. */
+                    Adafruit_BMP280::FILTER_X16,   /* Filtering. */
                     Adafruit_BMP280::STANDBY_MS_1);
 }
 
@@ -55,7 +55,7 @@ float BMPAltitudeUpdate()
 }
 float BMPAltitudeUpdateAGL()
 {
-    while (systemState < 1)
+    if (systemState < 1)
     {
         deviationDelay.start();
         if (deviationDelay.check() && !hasDeviation)
@@ -93,7 +93,7 @@ bool detectApogee()
 }
 void detectLanding()
 {
-    if (systemState == 2 && hitApogee && BMPAltitudeUpdateAGL() < 5)
+    if (systemState == 2 && hitApogee && BMPAltitudeUpdateAGL() < 2)
     {
         systemState++;
     }
