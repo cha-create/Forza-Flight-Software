@@ -13,9 +13,10 @@ void allPyrosLow()
     digitalWrite(31, LOW);
 }
 
-void pyro1Low(void *) {
+bool pyro1Low(void *) {
     pyroActive = false;
     digitalWrite(30, LOW);
+    return true;
 }
 
 void FirePyro1()

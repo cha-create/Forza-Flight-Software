@@ -11,6 +11,7 @@
 int systemState = 0;
 Timer<3> timer;
 //extern float SITLaltitudeUpdate();
+bool errorboi = false;
 extern float altitudeAGL = 0;
 extern int altitude = 0;
 extern int temp = 0;
