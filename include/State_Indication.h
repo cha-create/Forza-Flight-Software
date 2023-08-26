@@ -1,8 +1,15 @@
 #include <Arduino.h>
-#include <UniversalTimer.h>
-UniversalTimer lightDelay(1000, true);
-UniversalTimer lightDelay1(1000, true);
 extern int systemState;
+extern bool errorboi;
+unsigned long timerInterval = 1000;  // Interval for the timers (in milliseconds)
+unsigned long lastUpdateTime = 0;
+enum State {
+  STATE_INITIAL,
+  STATE_TIMER1,
+  STATE_TIMER2
+};
+
+State currentState = STATE_INITIAL;
 
 void State_Indication()
 {
@@ -27,32 +34,36 @@ void State_Indication()
     }
     if (systemState == 3)
     {
-        digitalWrite(9, HIGH);
-        digitalWrite(6, HIGH);
-    }
-    if (systemState == 4)
-    {
-        lightDelay.start();
-        while (!lightDelay.check())
-        {
+       // landing beeps and boops
+            unsigned long currentTime = millis();
+
+        if (currentTime - lastUpdateTime >= timerInterval) {
+        lastUpdateTime = currentTime;
+
+        switch (currentState) {
+            case STATE_INITIAL:
             digitalWrite(9, HIGH);
             tone(2, 2000);
-        }
-        noTone(2);
-        digitalWrite(9, LOW);
-        lightDelay.stop();
-        lightDelay1.start();
-        while (!lightDelay1.check())
-        {
+            currentState = STATE_TIMER1;
+            break;
+
+            case STATE_TIMER1:
+            digitalWrite(9, LOW);
             digitalWrite(6, HIGH);
             tone(2, 2500);
+            currentState = STATE_TIMER2;
+            break;
+
+            case STATE_TIMER2:
+            digitalWrite(6, LOW);
+            digitalWrite(9, HIGH);
+            tone(2, 2000);
+            currentState = STATE_TIMER1;
+            break;
         }
-        noTone(2);
-        digitalWrite(6, LOW);
-        lightDelay1.stop();
+        }           
     }
 }
-
 void startupBeeps()
 {
     tone(2, 1262);

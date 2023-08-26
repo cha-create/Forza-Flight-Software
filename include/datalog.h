@@ -31,7 +31,7 @@ void SDInit()
         if (forzaFlightData)
         {
 
-            forzaFlightData.println("Time, X_ACC, Y_ACC, Z_ACC, X_GYRO, Y_GYRO, Z_GYRO, System_State, altitude, altitudeAGL, Pressure, Temp, pyro1Fired, timeSinceLiftoff, maxAltitude");
+            forzaFlightData.println("Time, X_ACC, Y_ACC, Z_ACC, X_GYRO, Y_GYRO, Z_GYRO, Yaw, Pitch, Roll, System_State, altitude, altitudeAGL, Pressure, Temp, pyro1Fired, pyroActive, timeSinceLiftoff");
         }
         hasRun = true;
     }
@@ -43,10 +43,19 @@ void dataLog()
     forzaFlightData = SD.open(filename, FILE_WRITE);
     if (forzaFlightData)
     {
-        sprintf(buffer, "%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f,%f,%d,%d,%f", millis(), ax, ay, az, gx, gy, gz, systemState, BMPAltitudeUpdate(), BMPAltitudeUpdateAGL(), BMPPressureUpdate(), BMPTempUpdate(), pyro1Fired, timeSinceLiftoff, maxAltitude);
-        forzaFlightData.println(buffer);
-        // Serial.println(millis()); // just a lil debugging :)
-        delay(10);
+        forzaFlightData = SD.open(filename, FILE_WRITE);
+        if (forzaFlightData)
+        {
+            sprintf(buffer, "%d,%d,%d,%d,%d,%d,%d,%f,%f,%f,%d,%f,%f,%f,%f,%d,%d,%d", millis(), ax, ay, az, gx, gy, gz, angleZ, angleX, angleY, systemState, BMPAltitudeUpdate(), BMPAltitudeUpdateAGL(), BMPPressureUpdate(), BMPTempUpdate(), pyro1Fired, pyroActive,  timeSinceLiftoff);
+            forzaFlightData.println(buffer);
+            // Serial.println(millis()); // just a lil debugging :)
+            delay(10);
+        }
+        forzaFlightData.close();
+    }
+    else
+    {
+        forzaFlightData.close();
     }
     forzaFlightData.close();
 }

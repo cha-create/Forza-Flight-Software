@@ -1,21 +1,34 @@
 #include <Arduino.h>
 #include <IMU6050.h>
 #include <BARO280.h>
+#include <System.h>
+#include <arduino-timer.h>
 #include <GNC.h>
 #include <State_Indication.h>
-#include <System.h>
 #include <pyro.h>
 #include <datalog.h>
 #include <TVC.h>
 int systemState = 0;
+Timer<3> timer;
+//extern float SITLaltitudeUpdate();
 extern float altitudeAGL = 0;
 extern int altitude = 0;
 extern int temp = 0;
 extern int pressure = 0;
+
+
 void setup()
 {
+    allPyrosLow();
     Serial.begin(9600);
+    delay(3000);
+    pinMode(6, OUTPUT);
+    pinMode(9, OUTPUT);
+    pinMode(2, OUTPUT);
+    pinMode(30, OUTPUT);
+    pinMode(31, OUTPUT);
     mpuInit();
+    calibrateGyro();
     BMPInit();
     SDInit();
     TVCInitalize();
@@ -29,11 +42,15 @@ void loop()
 {
     timeKeeper();
     State_Indication();
+    //checkDataLog();
     navUpdate();
     dataLog();
     TVCCenter();
-    Serial.println(BMPAltitudeUpdateAGL()); // debugging
-    if (systemState == 0)                   // Ground idle
+    getAngle();
+    Serial.print(String(timeSinceLiftoff) + ", ");
+    Serial.print(String(angleX) + ", " + String(angleY) + ", " + String(angleZ) + ", ");
+    Serial.println(systemState);       // debugging
+    if (systemState == 0 && !errorboi) // Ground idle
     {
         allPyrosLow();
         detectLiftoff();
@@ -54,5 +71,6 @@ void loop()
     {
         stopDataLog();
     }
+    timer.tick();
     delay(10);
 }

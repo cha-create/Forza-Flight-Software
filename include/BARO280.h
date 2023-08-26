@@ -11,6 +11,7 @@ Adafruit_BMP280 bmp(BMP_CS);
 UniversalTimer deviationDelay(5000, false);
 extern int systemState;
 extern void failureBeeps();
+extern void FirePyro1();
 bool hitApogee;
 bool hasDeviation;
 float lastAltitude;
@@ -19,6 +20,9 @@ extern float altitudeAGL;
 int deviation;
 float maxAltitude;
 float currentAltitude = 0;
+
+
+
 void BMPInit()
 {
     if (!bmp.begin())
@@ -29,11 +33,11 @@ void BMPInit()
             ;
     }
     Serial.println("Succesfully connected to BMP280.");
-    bmp.setSampling(Adafruit_BMP280::MODE_NORMAL, /* Operating Mode. */
-                    Adafruit_BMP280::SAMPLING_X1, /* Temp. oversampling */
-                    Adafruit_BMP280::SAMPLING_X8, /* Pressure oversampling */
-                    Adafruit_BMP280::FILTER_X16,  /* Filtering. */
-                    Adafruit_BMP280::STANDBY_MS_1);
+    bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,  /* Operating Mode. */
+                    Adafruit_BMP280::SAMPLING_X2,  /* Temp. oversampling */
+                    Adafruit_BMP280::SAMPLING_X16, /* Pressure oversampling */
+                    Adafruit_BMP280::FILTER_X16,   /* Filtering. */
+                    Adafruit_BMP280::STANDBY_MS_125);
 }
 
 void printVals_BARO_x10()
@@ -69,12 +73,12 @@ float BMPAltitudeUpdateAGL()
             hasDeviation = true;
         }
         altitudeAGL = deviation - deviation;
-        return altitudeAGL;
+        return altitudeAGL; // 3.281;
     }
     if (systemState >= 1)
     {
         altitudeAGL = bmp.readAltitude(1013.55) - deviation;
-        return altitudeAGL;
+        return altitudeAGL; // /3.281;
     }
 }
 bool detectApogee()
@@ -88,17 +92,19 @@ bool detectApogee()
     {
         lastAltitude = currentAltitude;
         currentAltitude = BMPAltitudeUpdateAGL();
-        if (currentAltitude > lastAltitude - 0.2)
+        if (currentAltitude > lastAltitude - 0.05)
         {
             return false;
         }
         else
         {
+            FirePyro1();
             systemState++;
             hitApogee = true;
             return true;
         }
     }
+    return false;
 }
 void detectLanding()
 {
