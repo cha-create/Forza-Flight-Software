@@ -8,6 +8,8 @@ extern int temp;
 extern int altitude;
 extern float maxAltitude;
 extern bool pyro1Fired;
+extern int servoxAngle;
+extern int servozAngle;
 char buffer[128];
 bool hasRun = false;
 void SDInit()
@@ -31,7 +33,7 @@ void SDInit()
         if (forzaFlightData)
         {
 
-            forzaFlightData.println("Time, X_ACC, Y_ACC, Z_ACC, X_GYRO, Y_GYRO, Z_GYRO, Yaw, Pitch, Roll, System_State, altitude, altitudeAGL, Pressure, Temp, pyro1Fired, pyroActive, timeSinceLiftoff");
+            forzaFlightData.println("Time, X_ACC, Y_ACC, Z_ACC, X_GYRO, Y_GYRO, Z_GYRO, Yaw, Pitch, Roll, Serv_Angle_X, Serv_Angle_Z, System_State, altitude, altitudeAGL, Pressure, Temp, pyro1Fired, pyroActive, timeSinceLiftoff");
         }
         hasRun = true;
     }
@@ -46,7 +48,7 @@ void dataLog()
         forzaFlightData = SD.open(filename, FILE_WRITE);
         if (forzaFlightData)
         {
-            sprintf(buffer, "%d,%d,%d,%d,%d,%d,%d,%f,%f,%f,%d,%f,%f,%f,%f,%d,%d,%d", millis(), ax, ay, az, gx, gy, gz, angleZ, angleX, angleY, systemState, BMPAltitudeUpdate(), BMPAltitudeUpdateAGL(), BMPPressureUpdate(), BMPTempUpdate(), pyro1Fired, pyroActive,  timeSinceLiftoff);
+            sprintf(buffer, "%d,%d,%d,%d,%d,%d,%d,%f,%f,%f,%d,%d,%d,%f,%f,%f,%f,%d,%d,%d", millis(), ax, ay, az, gx, gy, gz, angleZ, angleX, angleY, servoxAngle, servozAngle, systemState, BMPAltitudeUpdate(), BMPAltitudeUpdateAGL(), BMPPressureUpdate(), BMPTempUpdate(), pyro1Fired, pyroActive,  timeSinceLiftoff);
             forzaFlightData.println(buffer);
             // Serial.println(millis()); // just a lil debugging :)
             delay(10);

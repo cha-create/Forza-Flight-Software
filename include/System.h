@@ -28,3 +28,10 @@ void timeKeeper()
         }
     }
 }
+
+void version() {
+    Serial.println();
+    Serial.println("Firmware Version 3.1 TVC");
+    Serial.println("------------------------");
+
+}

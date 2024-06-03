@@ -2,12 +2,14 @@
 #include <MPU6050.h>
 #include <I2Cdev.h>
 #include <Wire.h>
+#include <Buzzer.h>
 MPU6050 mpu;
 extern void failureBeeps();
 int16_t ax, ay, az;
 int16_t gx, gy, gz;
 bool hasLiftoff;
 extern int systemState;
+extern Buzzer buzzer;
 const float gyroScale = 131.0; // Gyro scale factor for full-scale range ±250 degrees per second
 float dt = 0.01;         // Time interval between readings
 int numReadings = 1000;
@@ -24,7 +26,7 @@ float angleZ = 0.0;
 void mpuInit()
 {
     Serial.println("");
-    Serial.println("Connecting to MPU6050 IMU...");
+    Serial.print("Connecting to MPU6050 IMU...");
     Wire.begin();
     mpu.initialize();
     if (!mpu.testConnection())
@@ -59,9 +61,10 @@ int calibrateGyro() {
         gyroXDrift += gyroX / 131.0;
         gyroYDrift += gyroY / 131.0;
         gyroZDrift += gyroZ / 131.0;
-        tone(2, 2500);
         delay(10);
-        tone(2, 1500);
+        if (i % 100 == 0) {
+            buzzer.sound(NOTE_F7, 50);
+        }
     }
     noTone(2);
     gyroXDrift /= numReadings;
@@ -95,11 +98,13 @@ int IMUAccelUpdate()
     mpu.getAcceleration(&ax, &ay, &az);
     return ax, ay, az;
 }
+
 int IMUGyroUpdate()
 {
     mpu.getRotation(&gx, &gy, &gz);
     return gx, gy, gz;
 }
+
 void detectLiftoff()
 {
     if (systemState == 0 && ay >= 25000)

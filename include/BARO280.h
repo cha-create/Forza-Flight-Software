@@ -17,6 +17,7 @@ bool hasDeviation;
 float lastAltitude;
 extern int timeSinceLiftoff;
 extern float altitudeAGL;
+extern void TVCCenter();
 int deviation;
 float maxAltitude;
 float currentAltitude = 0;
@@ -29,8 +30,8 @@ void BMPInit()
     {
         Serial.print("Connection To Barometer Failed...");
         failureBeeps();
-        while (1)
-            ;
+        // while (1)
+        //     ;
     }
     Serial.println("Succesfully connected to BMP280.");
     bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,  /* Operating Mode. */
@@ -98,6 +99,7 @@ bool detectApogee()
         }
         else
         {
+            TVCCenter();
             FirePyro1();
             systemState++;
             hitApogee = true;
@@ -108,7 +110,7 @@ bool detectApogee()
 }
 void detectLanding()
 {
-    if (systemState == 3 && hitApogee && BMPAltitudeUpdateAGL() < 5)
+    if (systemState == 2 && hitApogee && BMPAltitudeUpdateAGL() < 5)
     {
         systemState++;
     }
