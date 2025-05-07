@@ -51,7 +51,7 @@ void printVals_IMU_x10()
     }
 }
 
-int calibrateGyro() {
+void calibrateGyro() {
     Serial.println("Calibrating gyro...");
   
     for (int i = 0; i < numReadings; i++) {
@@ -72,13 +72,12 @@ int calibrateGyro() {
     gyroZDrift /= numReadings;
     
     Serial.println("Gyro calibration complete.");
-    return gyroXDrift, gyroYDrift, gyroZDrift;
 }
 
 
 
 
-int getAngle() {
+void updateAngle() {
     float gyroXRate = (gx / gyroScale) - gyroXDrift;
     float gyroYRate = (gy / gyroScale) - gyroYDrift;
     float gyroZRate = (gz / gyroScale) - gyroZDrift;
@@ -87,22 +86,18 @@ int getAngle() {
     angleX += gyroXRate * dt * 3;
     angleY += gyroYRate * dt * 3;
     angleZ += gyroZRate * dt * 3;
-    
-    return angleX, angleY, angleZ;
 }
 
 
 
-int IMUAccelUpdate()
+void IMUAccelUpdate()
 {
     mpu.getAcceleration(&ax, &ay, &az);
-    return ax, ay, az;
 }
 
-int IMUGyroUpdate()
+void IMUGyroUpdate()
 {
     mpu.getRotation(&gx, &gy, &gz);
-    return gx, gy, gz;
 }
 
 void detectLiftoff()

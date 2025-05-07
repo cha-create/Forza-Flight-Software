@@ -16,13 +16,14 @@ bool hitApogee;
 bool hasDeviation;
 float lastAltitude;
 extern int timeSinceLiftoff;
-extern float altitudeAGL;
+float altitudeAGL;
 extern void TVCCenter();
 int deviation;
 float maxAltitude;
 float currentAltitude = 0;
-
-
+float temp;
+float pressure;
+float altitude;
 
 void BMPInit()
 {
@@ -30,8 +31,8 @@ void BMPInit()
     {
         Serial.print("Connection To Barometer Failed...");
         failureBeeps();
-        // while (1)
-        //     ;
+        while (1)
+            ;
     }
     Serial.println("Succesfully connected to BMP280.");
     bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,  /* Operating Mode. */
@@ -81,6 +82,8 @@ float BMPAltitudeUpdateAGL()
         altitudeAGL = bmp.readAltitude(1013.55) - deviation;
         return altitudeAGL; // /3.281;
     }
+    
+    return -1; // something has gone terribly wrong
 }
 bool detectApogee()
 {

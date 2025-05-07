@@ -3,9 +3,12 @@
 #include <PID_v1.h>
 PWMServo servox;
 PWMServo servoy;
-double xinput, xoutput, setpoint;
+double setpoint = 0;
+double xinput, xoutput;
 double zinput, zoutput;
-double Kp=2, Ki=0, Kd=2;
+double Kp=0.45;
+double Ki=0.02;
+double Kd=0.35;
 int servoxAngle;
 int servozAngle;
 PID xPID(&xinput, &xoutput, &setpoint, Kp, Ki, Kd, DIRECT);
@@ -43,7 +46,10 @@ void TVCInitalize()
     setpoint = 0;
     xPID.SetMode(AUTOMATIC);
     zPID.SetMode(AUTOMATIC);
-
+    xPID.SetOutputLimits(-24, 24);
+    zPID.SetOutputLimits(-24, 24);
+    xPID.SetSampleTime(25);
+    zPID.SetSampleTime(25);
 }
 
 void TVCLoop() {
@@ -51,14 +57,13 @@ void TVCLoop() {
     zinput = angleZ;
     xPID.Compute();
     zPID.Compute();
-    servoxAngle = map(xoutput, 0, 100, 75, 35);
-    servozAngle = map(zoutput, 0, 100, 75, 35);
+    servoxAngle = map(xoutput, -24, 24, 75, 35);
+    servozAngle = map(zoutput, -24, 24, 35, 75);
     servox.write(servoxAngle);
     servoy.write(servozAngle);
-    delay(25);
-    Serial.print(xoutput);
-    Serial.print(", ");
-    Serial.println(zoutput);
+    // Serial.print(xoutput);
+    // Serial.print(", ");
+    // Serial.println(zoutput);
 }
 
 

@@ -3,7 +3,7 @@
 #include <BARO280.h>
 #include <System.h>
 #include <arduino-timer.h>
-#include <GNC.h>
+#include <Nav.h>
 #include <State_Indication.h>
 #include <Buzzer.h>
 #include <pyro.h>
@@ -13,10 +13,10 @@ int systemState = 0;
 Timer<3> timer;
 //extern float SITLaltitudeUpdate();
 bool errorboi = false;
-extern float altitudeAGL = 0;
-extern int altitude = 0;
-extern int temp = 0;
-extern int pressure = 0;
+extern float altitudeAGL;
+extern float altitude;
+extern float temp;
+extern float pressure;
 Buzzer buzzer(2);
 
 
@@ -55,19 +55,18 @@ void loop()
     //checkDataLog();
     navUpdate();
     dataLog();
-    TVCCenter();
-    getAngle();
+    updateAngle();
 //    Serial.print(String(timeSinceLiftoff) + ", ");
 //    Serial.print(String(angleX) + ", " + String(angleY) + ", " + String(angleZ) + ", ");
 //    Serial.println(systemState);       // debugging
     if (systemState == 0 && !errorboi) // Ground idle
     {
+        TVCCenter();
         allPyrosLow();
         detectLiftoff();
     }
     if (systemState == 1) // Ascent
     {
-
         TVCLoop();
         detectApogee();
     }
@@ -77,6 +76,7 @@ void loop()
     // }
     if (systemState == 2) // Under chutes
     {
+        TVCCenter();
         detectLanding();
     }
     if (systemState == 3)
